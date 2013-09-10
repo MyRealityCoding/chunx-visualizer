@@ -1,6 +1,5 @@
 package de.myreality.chunx.visualizer;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.newdawn.slick.AppGameContainer;
@@ -43,7 +42,7 @@ public class ChunxVisualizer extends BasicGame {
 	@Override
 	public void init(GameContainer arg0) throws SlickException {
 		
-		target = new Entity(200, 200); // You have to write your own implementation
+		target = new Entity(140, 200); // You have to write your own implementation
 		World world = new World(); // You have to write your own implementation
 		CachedChunkConfiguration  configuration = new SimpleCachedChunkConfiguration();
 		configuration.setFocused(target);
@@ -51,7 +50,7 @@ public class ChunxVisualizer extends BasicGame {
 		configuration.setCacheSize(4);
 		configuration.setChunkSize(20);
 		chunkSystem = new ConcurrentChunkSystem(new SimpleCachedChunkSystem(configuration));
-		ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+		ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
 		executor.scheduleAtFixedRate(chunkSystem, 0, UPDATE_INTERVAL, TimeUnit.MILLISECONDS);
 		chunkSystem.start();
 	}

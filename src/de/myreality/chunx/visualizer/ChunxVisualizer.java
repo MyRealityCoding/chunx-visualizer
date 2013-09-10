@@ -40,7 +40,7 @@ public class ChunxVisualizer extends BasicGame {
 			
 			if (chunkSystem.getActiveChunk() != null) {
 				if (chunk.equals(chunkSystem.getActiveChunk())) {
-					g.setColor(Color.green);
+					g.setColor(Color.lightGray);
 				} else if (cache.containsIndex(chunk)) {
 					g.setColor(Color.gray);
 				} else {

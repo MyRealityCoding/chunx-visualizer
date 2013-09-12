@@ -94,10 +94,10 @@ public class ChunxVisualizer extends BasicGame {
 	}
 
 	@Override
-	public void init(GameContainer arg0) throws SlickException {
+	public void init(GameContainer gc) throws SlickException {
 		
-		target = new Entity(140, 200); // You have to write your own implementation
-		world = new World(); // You have to write your own implementation
+		target = new Entity(gc.getWidth() /2f,  gc.getHeight() / 2f);
+		world = new World(); 
 		CachedChunkConfiguration  configuration = new SimpleCachedChunkConfiguration();
 		configuration.setFocused(target);
 		configuration.setContentProvider(world);
@@ -150,6 +150,7 @@ public class ChunxVisualizer extends BasicGame {
 		}
 		
 		if (input.isKeyPressed(Input.KEY_ESCAPE)) {
+			shutdown();	
 			gc.exit();
 		}
 			
@@ -159,7 +160,7 @@ public class ChunxVisualizer extends BasicGame {
 	private int getAmount() {
 		switch (mode) {
 		case EXTREM:
-			return 50;
+			return 150;
 		case MULTI:
 			return 15;
 		case SIMPLE:
@@ -176,9 +177,8 @@ public class ChunxVisualizer extends BasicGame {
 	public static void main(String[] args) throws SlickException {
 		ChunxVisualizer v = new ChunxVisualizer("Chunk Visualizer");
 		AppGameContainer app = new AppGameContainer(v);
-		app.setDisplayMode(800, 600, true);
-		app.start();
-		v.shutdown();		
+		app.setDisplayMode(1280, 800, false);
+		app.start();	
 	}
 
 }

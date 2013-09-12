@@ -2,7 +2,7 @@
 
 ~*
 *~
-
+*.log
 # Package Files #
 *.jar
 *.war

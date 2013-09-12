@@ -30,9 +30,14 @@ public class ChunxVisualizer extends BasicGame {
 	private World world;
 	
 	private PositionInterpreter interpreter;
+	
+	private GameMode mode;
+	
+	enum GameMode { SIMPLE, MULTI, EXTREM }
 
 	public ChunxVisualizer(String title) {
 		super(title);
+		mode = GameMode.SIMPLE;
 	}
 
 	@Override
@@ -70,6 +75,22 @@ public class ChunxVisualizer extends BasicGame {
 		
 		g.setColor(Color.white);
 		g.drawString("Entities: " + world.size(), 10, 30);
+		
+		switch (mode) {
+		case EXTREM:
+			g.drawString("Mode: Ultra", 10, 50);
+			break;
+		case MULTI:
+			g.drawString("Mode: Multi", 10, 50);
+			break;
+		case SIMPLE:
+			g.drawString("Mode: Simple", 10, 50);
+			break;
+		default:
+			g.drawString("Mode: None", 10, 50);
+			break;
+		
+		}
 	}
 
 	@Override
@@ -96,6 +117,14 @@ public class ChunxVisualizer extends BasicGame {
 	public void update(GameContainer gc, int delta) throws SlickException {
 		Input input = gc.getInput();
 		
+		if (input.isKeyPressed(Input.KEY_1)){
+			mode =  GameMode.SIMPLE;
+		} else if (input.isKeyPressed(Input.KEY_2)) {
+			mode = GameMode.MULTI;
+		} else if (input.isKeyPressed(Input.KEY_3)) {
+			mode = GameMode.EXTREM;
+		}
+		
 		chunkSystem.update(delta);
 		
 		world.update(delta);
@@ -104,12 +133,16 @@ public class ChunxVisualizer extends BasicGame {
 		target.setY(input.getMouseY());
 		
 			
-		if (input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
+		boolean spam = mode != GameMode.SIMPLE && input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON);
+		
+		if (spam || input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+			
+			int amount = getAmount();			
 			int indexX = interpreter.translateX(input.getMouseX());
 			int indexY = interpreter.translateY(input.getMouseY());
 			
 			if (chunkSystem.getCache().containsIndex(indexX, indexY)) {
-				for (int i = 0; i < 50; ++i) {
+				for (int i = 0; i < amount; ++i) {
 					MovingEntity entity = new MovingEntity(input.getMouseX(), input.getMouseY(), chunkSystem.getConfiguration());
 					world.add(entity);
 				}
@@ -121,6 +154,19 @@ public class ChunxVisualizer extends BasicGame {
 		}
 			
 			
+	}
+	
+	private int getAmount() {
+		switch (mode) {
+		case EXTREM:
+			return 50;
+		case MULTI:
+			return 15;
+		case SIMPLE:
+			return 1;
+		default:
+			return 0;
+		}
 	}
 	
 	public void shutdown() {

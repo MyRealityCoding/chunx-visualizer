@@ -8,7 +8,7 @@ public class ChunkRevitalizer implements ChunkListener {
 	
 	private ChunkSystem system;
 	
-	final int COUNT = 1;
+	final int COUNT = 0;
 	
 	public ChunkRevitalizer(ChunkSystem system) {
 		this.system = system;
@@ -18,13 +18,13 @@ public class ChunkRevitalizer implements ChunkListener {
 	public void afterCreateChunk(Chunk chunk) {
 		
 		// Spawn entities
-		for (int i = 0; i < COUNT; ++i) {
-			float x = (float) (chunk.getX() + Math.random() * chunk.getWidth());
-			float y = (float) (chunk.getY() + Math.random() * chunk.getHeight());
+		//for (int i = 0; i < COUNT; ++i) {
+			//float x = (float) (chunk.getX() + Math.random() * chunk.getWidth());
+			//float y = (float) (chunk.getY() + Math.random() * chunk.getHeight());
 			
-			MovingEntity entity = new MovingEntity(x, y, system.getConfiguration());
-			chunk.add(entity);
-		}
+			//MovingEntity entity = new MovingEntity(x, y, system.getConfiguration());
+			//chunk.add(entity);
+		//ist}
 	}
 
 	@Override

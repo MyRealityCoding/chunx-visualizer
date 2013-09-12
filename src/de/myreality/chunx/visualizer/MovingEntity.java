@@ -15,7 +15,7 @@ public class MovingEntity extends Entity implements MoveableChunkTarget {
 	
 	private float xVelo, yVelo;
 	
-	private float maxSpeed = 0.3f;
+	private float maxSpeed = 0.1f;
 
 	public MovingEntity(float x, float y, ChunkConfiguration config) {
 		super(x, y);
@@ -33,11 +33,11 @@ public class MovingEntity extends Entity implements MoveableChunkTarget {
 		float factorX = 0, factorY = 0;
 		
 		if (Math.abs(xVelo) < maxSpeed) {
-			factorX += (float) (Math.random() * 0.01f);
+			factorX += (float) (Math.random() * 0.005f);
 		}
 		
 		if (Math.abs(yVelo) < maxSpeed) {
-			factorY += (float) (Math.random() * 0.01f);
+			factorY += (float) (Math.random() * 0.005f);
 		}
 		
 		factorX *= (Math.random() > 0.5f) ? 1 : -1;
@@ -63,7 +63,7 @@ public class MovingEntity extends Entity implements MoveableChunkTarget {
 	}
 	
 	public void draw(Graphics g) {
-		final int size = 4;
+		final int size = 8;
 		
 		g.setColor(Color.green);
 		
@@ -74,5 +74,8 @@ public class MovingEntity extends Entity implements MoveableChunkTarget {
 		}
 		
 		g.fillRect(getX() - size / 2f, getY() - size / 2f, size, size);
+		g.setLineWidth(2);
+		g.setColor(Color.black);
+		g.drawRect(getX() - size / 2f, getY() - size / 2f, size, size);
 	}
 }

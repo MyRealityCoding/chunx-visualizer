@@ -11,11 +11,11 @@ import org.newdawn.slick.SlickException;
 import de.myreality.chunx.Chunk;
 import de.myreality.chunx.ChunkConfiguration;
 import de.myreality.chunx.ChunkTarget;
-import de.myreality.chunx.caching.Cache;
 import de.myreality.chunx.caching.CachedChunkConfiguration;
 import de.myreality.chunx.caching.CachedChunkSystem;
 import de.myreality.chunx.caching.SimpleCachedChunkConfiguration;
 import de.myreality.chunx.caching.SimpleCachedChunkSystem;
+import de.myreality.chunx.util.IndexBoundable;
 import de.myreality.chunx.util.PositionInterpreter;
 import de.myreality.chunx.util.SimplePositionInterpreter;
 
@@ -43,7 +43,7 @@ public class ChunxVisualizer extends BasicGame {
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException {
 		
-		Cache cache = chunkSystem.getCache();
+		IndexBoundable cache = chunkSystem.getCache();
 		ChunkConfiguration config = chunkSystem.getConfiguration();
 		
 		

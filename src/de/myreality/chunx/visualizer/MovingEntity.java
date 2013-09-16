@@ -49,7 +49,9 @@ public class MovingEntity extends Entity implements MoveableChunkTarget {
 		setX((float) (getX() + xVelo * delta));
 		setY((float) (getY() + yVelo * delta));
 		
-		detector.update(delta);
+		if (detector != null) {
+			detector.update(delta);
+		}
 	}
 
 	@Override
@@ -62,15 +64,18 @@ public class MovingEntity extends Entity implements MoveableChunkTarget {
 		this.detector = detector;
 	}
 	
+	@Override
 	public void draw(Graphics g) {
 		final int size = 8;
 		
 		g.setColor(Color.green);
 		
-		int listeners = this.getMovementDetector().getListeners().size();
-		
-		if (listeners < 1) {
-			g.setColor(Color.red);
+		if (this.detector != null) {
+			int listeners = this.getMovementDetector().getListeners().size();
+			
+			if (listeners < 1) {
+				g.setColor(Color.red);
+			}		
 		}
 		
 		g.fillRect(getX() - size / 2f, getY() - size / 2f, size, size);

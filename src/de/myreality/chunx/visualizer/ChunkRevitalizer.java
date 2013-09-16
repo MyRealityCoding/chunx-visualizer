@@ -1,14 +1,14 @@
 package de.myreality.chunx.visualizer;
 
 import de.myreality.chunx.Chunk;
-import de.myreality.chunx.ChunkListener;
 import de.myreality.chunx.ChunkSystem;
+import de.myreality.chunx.ChunkSystemListener;
 
-public class ChunkRevitalizer implements ChunkListener {
+public class ChunkRevitalizer implements ChunkSystemListener {
 	
 	private ChunkSystem system;
 	
-	final int COUNT = 0;
+	final int COUNT = 1;
 	
 	public ChunkRevitalizer(ChunkSystem system) {
 		this.system = system;
@@ -22,8 +22,10 @@ public class ChunkRevitalizer implements ChunkListener {
 			float x = (float) (chunk.getX() + Math.random() * chunk.getWidth());
 			float y = (float) (chunk.getY() + Math.random() * chunk.getHeight());
 			
-			MovingEntity entity = new MovingEntity(x, y, system.getConfiguration());
-			chunk.add(entity);
+			if (Math.random() * 100 < 8) {
+				Entity entity = new Entity(x, y);
+				chunk.add(entity);
+			}
 		}
 	}
 

@@ -42,8 +42,8 @@ public class World implements ContentProvider {
 	
 	public void render(Graphics g) {
 		for (ChunkTarget target : targets) {
-			if (target instanceof MovingEntity) {
-				((MovingEntity) target).draw(g);
+			if (target instanceof Entity) {
+				((Entity) target).draw(g);
 			}
 		}
 	}

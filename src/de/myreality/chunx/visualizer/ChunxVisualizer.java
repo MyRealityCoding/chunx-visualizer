@@ -10,11 +10,13 @@ import org.newdawn.slick.SlickException;
 
 import de.myreality.chunx.Chunk;
 import de.myreality.chunx.ChunkConfiguration;
+import de.myreality.chunx.ChunkSystem;
 import de.myreality.chunx.ChunkTarget;
 import de.myreality.chunx.caching.CachedChunkConfiguration;
 import de.myreality.chunx.caching.CachedChunkSystem;
 import de.myreality.chunx.caching.SimpleCachedChunkConfiguration;
 import de.myreality.chunx.caching.SimpleCachedChunkSystem;
+import de.myreality.chunx.concurrent.ConcurrentChunkSystem;
 import de.myreality.chunx.util.IndexBoundable;
 import de.myreality.chunx.util.PositionInterpreter;
 import de.myreality.chunx.util.SimplePositionInterpreter;
@@ -23,7 +25,9 @@ public class ChunxVisualizer extends BasicGame {
 	
 	final int UPDATE_INTERVAL = 20;
 	
-	private CachedChunkSystem chunkSystem;
+	private CachedChunkSystem cachedChunkSystem;
+	
+	private ChunkSystem system;
 	
 	private ChunkTarget target;
 	
@@ -43,8 +47,8 @@ public class ChunxVisualizer extends BasicGame {
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException {
 		
-		IndexBoundable cache = chunkSystem.getCache();
-		ChunkConfiguration config = chunkSystem.getConfiguration();
+		IndexBoundable cache = cachedChunkSystem.getCache();
+		ChunkConfiguration config = cachedChunkSystem.getConfiguration();
 		
 		
 		for (int x = 0; x < gc.getWidth(); x += config.getChunkWidth()) {
@@ -55,10 +59,11 @@ public class ChunxVisualizer extends BasicGame {
 			}
 		}
 		
-		for (Chunk chunk : chunkSystem.getChunks()) {
+		for (Chunk chunk : cachedChunkSystem.getChunks()) {
 
-			if (chunkSystem.getActiveChunk() != null) {
-				if (chunk.equals(chunkSystem.getActiveChunk())) {
+			if (chunk != null && cachedChunkSystem.getActiveChunk() != null) {
+				
+				if (chunk.equals(cachedChunkSystem.getActiveChunk())) {
 					g.setColor(Color.lightGray);
 				} else if (cache.containsIndex(chunk)) {
 					g.setColor(Color.gray);
@@ -104,12 +109,11 @@ public class ChunxVisualizer extends BasicGame {
 		configuration.setCacheSizeX(3);
 		configuration.setCacheSizeY(3);
 		configuration.setChunkSize(50);
-		chunkSystem = new SimpleCachedChunkSystem(configuration);
-		ChunkRevitalizer vitalizer = new ChunkRevitalizer(chunkSystem);
-		chunkSystem.addListener(vitalizer);
-		//ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
-		//executor.scheduleAtFixedRate(chunkSystem, 0, UPDATE_INTERVAL, TimeUnit.MILLISECONDS);
-		chunkSystem.start();
+		cachedChunkSystem = new SimpleCachedChunkSystem(configuration);
+		system = new ConcurrentChunkSystem(cachedChunkSystem);
+		ChunkRevitalizer vitalizer = new ChunkRevitalizer(system);
+		system.addListener(vitalizer);
+		system.start();
 		interpreter = new SimplePositionInterpreter(configuration);
 	}
 
@@ -125,8 +129,6 @@ public class ChunxVisualizer extends BasicGame {
 			mode = GameMode.EXTREM;
 		}
 		
-		chunkSystem.update(delta);
-		
 		world.update(delta);
 		
 		target.setX(input.getMouseX());
@@ -141,9 +143,9 @@ public class ChunxVisualizer extends BasicGame {
 			int indexX = interpreter.translateX(input.getMouseX());
 			int indexY = interpreter.translateY(input.getMouseY());
 			
-			if (chunkSystem.getCache().containsIndex(indexX, indexY)) {
+			if (cachedChunkSystem.getCache().containsIndex(indexX, indexY)) {
 				for (int i = 0; i < amount; ++i) {
-					MovingEntity entity = new MovingEntity(input.getMouseX(), input.getMouseY(), chunkSystem.getConfiguration());
+					MovingEntity entity = new MovingEntity(input.getMouseX(), input.getMouseY(), cachedChunkSystem.getConfiguration());
 					world.add(entity);
 				}
 			}
@@ -171,7 +173,7 @@ public class ChunxVisualizer extends BasicGame {
 	}
 	
 	public void shutdown() {
-		chunkSystem.shutdown();
+		system.shutdown();
 	}
 	
 	public static void main(String[] args) throws SlickException {

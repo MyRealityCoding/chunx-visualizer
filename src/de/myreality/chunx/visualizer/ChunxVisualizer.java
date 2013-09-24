@@ -16,7 +16,6 @@ import de.myreality.chunx.caching.CachedChunkConfiguration;
 import de.myreality.chunx.caching.CachedChunkSystem;
 import de.myreality.chunx.caching.SimpleCachedChunkConfiguration;
 import de.myreality.chunx.caching.SimpleCachedChunkSystem;
-import de.myreality.chunx.concurrent.ConcurrentChunkSystem;
 import de.myreality.chunx.util.IndexBoundable;
 import de.myreality.chunx.util.PositionInterpreter;
 import de.myreality.chunx.util.SimplePositionInterpreter;
@@ -110,8 +109,8 @@ public class ChunxVisualizer extends BasicGame {
 		configuration.setCacheSizeY(3);
 		configuration.setChunkSize(50);
 		cachedChunkSystem = new SimpleCachedChunkSystem(configuration);
-		system = new ConcurrentChunkSystem(cachedChunkSystem);
-		ChunkRevitalizer vitalizer = new ChunkRevitalizer(system);
+		system = cachedChunkSystem;//new ConcurrentChunkSystem(cachedChunkSystem);
+		ChunkRevitalizer vitalizer = new ChunkRevitalizer();
 		system.addListener(vitalizer);
 		system.start();
 		interpreter = new SimplePositionInterpreter(configuration);
@@ -128,7 +127,7 @@ public class ChunxVisualizer extends BasicGame {
 		} else if (input.isKeyPressed(Input.KEY_3)) {
 			mode = GameMode.EXTREM;
 		}
-		
+		system.update();
 		world.update(delta);
 		
 		target.setX(input.getMouseX());

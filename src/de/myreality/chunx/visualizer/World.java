@@ -5,35 +5,34 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.newdawn.slick.Graphics;
 
-import de.myreality.chunx.ChunkTarget;
 import de.myreality.chunx.ContentProvider;
 import de.myreality.chunx.util.Updateable;
 
 public class World implements ContentProvider {
 	
-	private CopyOnWriteArrayList<ChunkTarget> targets;
+	private CopyOnWriteArrayList<Object> targets;
 	
 	public World() {
-		targets = new CopyOnWriteArrayList<ChunkTarget>();
+		targets = new CopyOnWriteArrayList<Object>();
 	}
 
 	@Override
-	public void add(ChunkTarget target) {
+	public void add(Object target) {
 		targets.add(target);
 	}
 
 	@Override
-	public Collection<ChunkTarget> getContent() {
+	public Collection<Object> getContent() {
 		return targets;
 	}
 
 	@Override
-	public void remove(ChunkTarget target) {
+	public void remove(Object target) {
 		targets.remove(target);
 	}
 	
 	public void update(int delta) {
-		for (ChunkTarget target : targets) {
+		for (Object target : targets) {
 			if (target instanceof Updateable) {
 				((Updateable) target).update(delta);
 			}
@@ -41,7 +40,7 @@ public class World implements ContentProvider {
 	}
 	
 	public void render(Graphics g) {
-		for (ChunkTarget target : targets) {
+		for (Object target : targets) {
 			if (target instanceof Entity) {
 				((Entity) target).draw(g);
 			}

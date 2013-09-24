@@ -1,18 +1,11 @@
 package de.myreality.chunx.visualizer;
 
 import de.myreality.chunx.Chunk;
-import de.myreality.chunx.ChunkSystem;
 import de.myreality.chunx.ChunkSystemListener;
 
 public class ChunkRevitalizer implements ChunkSystemListener {
 	
-	private ChunkSystem system;
-	
 	final int COUNT = 1;
-	
-	public ChunkRevitalizer(ChunkSystem system) {
-		this.system = system;
-	}
 
 	@Override
 	public void afterCreateChunk(Chunk chunk) {
